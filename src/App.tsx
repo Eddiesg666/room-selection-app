@@ -101,11 +101,17 @@ const AuctionRoomPage = () => {
 // 3. Main App component with routes
 export default function App() {
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/auction/:auctionId" element={<AuctionRoomPage />} />
-      </Routes>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-300 via-purple-100 to-pink-200 flex items-center justify-center font-sans">
+      <div className="w-full max-w-3xl p-8 rounded-3xl shadow-2xl backdrop-blur-md bg-white/80 border border-white/40 animate-fade-in">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/auction/:auctionId" element={<AuctionRoomPage />} />
+        </Routes>
+      </div>
+      <style>{`
+        @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+        .animate-fade-in { animation: fade-in 0.8s cubic-bezier(.4,0,.2,1) both; }
+      `}</style>
     </div>
   );
 }
