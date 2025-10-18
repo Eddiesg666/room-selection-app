@@ -65,3 +65,4 @@ npm run dev
     ```sh
     firebase deploy
     ```
+[Try HomeSlice Live!](https://room-selection-app.web.app)
