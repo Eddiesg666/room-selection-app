@@ -105,11 +105,13 @@ export const AuctionView = ({ auction, currentUserId }: { auction: Auction, curr
 
     // Your bid must be at least the current price.
     if (amount < room.price) {
-      alert(
-        `Your bid must be at least the current room price of $${room.price.toFixed(
-          2,
-        )}`,
-      );
+      alert(`Your bid must be at least the current room price of $${room.price.toFixed(2)}`);
+      return;
+    }
+
+    // Prevent bids exceeding totalRent
+    if (amount > auction.totalRent) {
+      alert(`Your bid cannot exceed the total rent of $${auction.totalRent.toFixed(2)}`);
       return;
     }
 

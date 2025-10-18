@@ -47,7 +47,7 @@ describe('auction-client', () => {
 
   it('subscribeToAuction sets up listener and returns unsubscribe', () => {
     const cb = vi.fn();
-    onValueMock.mockImplementation((ref, handler) => handler({ exists: () => true, val: () => ({ id: 'auctionId' }) }));
+  onValueMock.mockImplementation((_, handler) => handler({ exists: () => true, val: () => ({ id: 'auctionId' }) }));
     const unsubscribe = auctionClient.subscribeToAuction('auctionId', cb);
     expect(onValueMock).toHaveBeenCalled();
     unsubscribe();
