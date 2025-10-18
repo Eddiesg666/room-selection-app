@@ -20,7 +20,7 @@ const HomePage = () => {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">Homeslice</h1>
+  <h1 className="text-3xl font-bold mb-4">HomeSlice</h1>
       <AuctionCreator onCreate={handleCreateAuction} />
     </div>
   );
