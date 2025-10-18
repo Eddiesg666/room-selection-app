@@ -3,24 +3,41 @@ import { vi } from 'vitest';
 import { AuctionCreator } from './AuctionCreator';
 
 describe('AuctionCreator', () => {
-  it('shows inline validation when names are missing', () => {
-  const onCreate = vi.fn();
-  render(<AuctionCreator onCreate={onCreate} />);
+  it('renders input fields and button', () => {
+    const onCreate = vi.fn();
+    render(<AuctionCreator onCreate={onCreate} />);
+    expect(screen.getByLabelText(/Total Rent/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Number of Rooms/i)).toBeInTheDocument();
+    expect(screen.getByText(/Create Auction/i)).toBeInTheDocument();
+  });
 
-  // set count to 2 and clear one user name
-  const countInput = screen.getByRole('spinbutton') as HTMLInputElement;
-  fireEvent.change(countInput, { target: { value: '2' } });
-
-  // clear second user name
-  const userInputs = screen.getAllByRole('textbox');
-  // textbox inputs include totalRent, then room and user name textboxes; pick the last textbox for the second user
-  const lastUserInput = userInputs[userInputs.length - 1];
-  fireEvent.change(lastUserInput, { target: { value: '' } });
-
-    const button = screen.getByText(/Create Auction/i);
-    fireEvent.click(button);
-
-    expect(screen.getByText(/Please enter names for all rooms and users/i)).toBeInTheDocument();
+  it('shows error if room names are missing', () => {
+    const onCreate = vi.fn();
+    render(<AuctionCreator onCreate={onCreate} />);
+    fireEvent.change(screen.getByLabelText(/Number of Rooms/i), { target: { value: '3' } });
+    fireEvent.change(screen.getAllByRole('textbox')[2], { target: { value: '' } });
+    fireEvent.click(screen.getByText(/Create Auction/i));
+    expect(screen.getByText(/Please enter names for all rooms/i)).toBeInTheDocument();
     expect(onCreate).not.toHaveBeenCalled();
+  });
+
+  it('shows error if total rent is invalid', () => {
+    const onCreate = vi.fn();
+    render(<AuctionCreator onCreate={onCreate} />);
+    fireEvent.change(screen.getByLabelText(/Total Rent/i), { target: { value: '0' } });
+    fireEvent.click(screen.getByText(/Create Auction/i));
+    expect(screen.getByText(/Please enter a valid total rent/i)).toBeInTheDocument();
+    expect(onCreate).not.toHaveBeenCalled();
+  });
+
+  it('calls onCreate with correct data', () => {
+    const onCreate = vi.fn();
+    render(<AuctionCreator onCreate={onCreate} />);
+    fireEvent.change(screen.getByLabelText(/Total Rent/i), { target: { value: '1000' } });
+    fireEvent.change(screen.getByLabelText(/Number of Rooms/i), { target: { value: '2' } });
+    fireEvent.change(screen.getAllByRole('textbox')[0], { target: { value: 'A' } });
+    fireEvent.change(screen.getAllByRole('textbox')[1], { target: { value: 'B' } });
+    fireEvent.click(screen.getByText(/Create Auction/i));
+    expect(onCreate).toHaveBeenCalledWith({ totalRent: 1000, rooms: ['A', 'B'] });
   });
 });
